@@ -3,6 +3,9 @@ name: Build Iosevka
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,22 +17,22 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
-      - name: Install dependencies
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ttfautohint
+
+      - name: Install npm deps
         run: npm install
 
       - name: Build font
         run: |
-          npm run build -- contents::IosevkaCustom
-
-      - name: Archive build
-        run: |
-          mkdir dist
-          cp -r dist/* dist_out/ || true
+          npm run build -- contents::iosevka-custom
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: iosevka-font
-          path: dist
+          path: dist/**
