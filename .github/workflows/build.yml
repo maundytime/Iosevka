@@ -29,7 +29,7 @@ jobs:
 
       - name: Build font
         run: |
-          npm run build -- contents::iosevka-custom
+          npm run build -- contents::IosevkaCustom
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
